@@ -1,0 +1,9 @@
+: 1
+name: libgtest
+version: 0.1.0
+summary: Google Test and Google Mock libraries
+license: MIT
+url: https://github.com/rsitko92/googletest-build2
+email: robert.sitko92@gmail.com
+depends: * build2 >= 0.9.0-
+depends: * bpkg >= 0.9.0-

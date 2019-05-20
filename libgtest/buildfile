@@ -1,0 +1,52 @@
+hxx{*}: extension = h
+cxx{*}: extension = cc
+
+gtest_dir = $src_base/googletest/
+
+./ : googletest/googletest/ googletest/googletest/samples/ googletest/googlemock/
+
+googletest/googletest/
+{
+  ./: liba{gtest} : {cxx}{src/* -src/gtest-all -src/gtest_main} {hxx}{include/** src/*}
+  liba{gtest} : cxx.export.poptions += "-I$src_base/include" "-I$src_base"
+  liba{gtest} : cxx.libs += -lpthread
+
+  ./: liba{gtest_main} : {cxx}{src/gtest_main} liba{gtest}
+  liba{gtest_main} : cxx.export.poptions += "-I$src_base/include" "-I$src_base"
+  liba{gtest_main} : bin.whole = true
+
+  cxx.poptions =+ "-I$src_base/include" "-I$src_base"
+}
+
+googletest/googletest/samples/
+{
+  ./: exe{sample1_unittest} : {cxx}{sample1_unittest sample1} {hxx}{*} liba{../gtest_main}
+  ./: exe{sample2_unittest} : {cxx}{sample2_unittest sample2} {hxx}{*} liba{../gtest_main}
+  ./: exe{sample3_unittest} : {cxx}{sample3_unittest} {hxx}{*} liba{../gtest_main}
+  ./: exe{sample4_unittest} : {cxx}{sample4_unittest sample4} {hxx}{*} liba{../gtest_main}
+  ./: exe{sample5_unittest} : {cxx}{sample5_unittest sample1} {hxx}{*} liba{../gtest_main}
+  ./: exe{sample6_unittest} : {cxx}{sample6_unittest} {hxx}{*} liba{../gtest_main}
+  ./: exe{sample7_unittest} : {cxx}{sample7_unittest} {hxx}{*} liba{../gtest_main}
+  ./: exe{sample8_unittest} : {cxx}{sample8_unittest} {hxx}{*} liba{../gtest_main}
+  ./: exe{sample9_unittest} : {cxx}{sample9_unittest} {hxx}{*} liba{../gtest}
+  ./: exe{sample10_unittest} : {cxx}{sample10_unittest} {hxx}{*} liba{../gtest}
+
+  exe{*}: dist = false
+  exe{*}: install = false
+  exe{*}: test = true
+
+  cxx.poptions =+ "-I$src_base"
+}
+
+googletest/googlemock/
+{
+  ./: liba{gmock} : {cxx}{src/* -src/gmock-all -src/gmock_main} {hxx}{include/**} liba{../googletest/gtest}
+  liba{gmock} : cxx.export.poptions += "-I$src_base/include" "-I$src_base" "-I$gtest_dir/googletest/include" "-I$gtest_dir/googletest"
+  liba{gmock} : cxx.libs += -lpthread
+
+  ./: liba{gmock_main} : {cxx}{src/gmock_main} liba{gmock}
+  liba{gmock_main} : cxx.export.poptions += "-I$src_base/include" "-I$src_base" "-I$gtest_dir/googletest/include" "-I$gtest_dir/googletest"
+  liba{gmock_main} : bin.whole = true
+
+  cxx.poptions =+ "-I$src_base/include" "-I$src_base" "-I$gtest_dir/googletest/include"
+}

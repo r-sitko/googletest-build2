@@ -1,0 +1,6 @@
+$out_root/
+{
+  include libgtest/
+}
+
+export $out_root/libgtest/$import.target

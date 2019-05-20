@@ -1,0 +1,3 @@
+import libs += libgtest%liba{googletest/googlemock/gmock}
+
+exe{test}: {hxx ixx txx cxx}{**} $libs testscript{**}
